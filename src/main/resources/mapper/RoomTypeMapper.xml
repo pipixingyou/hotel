@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wtu.mapper.RoomTypeMapper">
+    <!--订房后房间数量-1-->
+    <update id="orderRoomType" parameterType="com.wtu.entity.RoomType">
+        update roomtype set rnums = rnums - 1
+        where typeid = #{typeid}
+    </update>
+
+    <!--订房后房间数量+1-->
+    <update id="quitRoomType" parameterType="com.wtu.entity.RoomType">
+        update roomtype set rnums = rnums + 1
+        where typeid = #{typeid}
+    </update>
+<!--    根据rid查询房间类型-->
+    <select id="selectPrice" resultType="com.wtu.entity.RoomType">
+        select * from roomtype where typeid = #{typeid}
+    </select>
+</mapper>

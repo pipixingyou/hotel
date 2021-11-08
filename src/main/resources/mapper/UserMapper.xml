@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wtu.mapper.UserMapper">
+
+    <resultMap id="joinUser" type="com.wtu.entity.User">
+        <result property="uid" column="uid"/>
+        <result property="uname" column="uname"/>
+        <result property="idcard" column="idcard"/>
+        <result property="uphone" column="uphone"/>
+        <result property="usex" column="usex"/>
+        <result property="rid" column="rid"/>
+        <result property="fromtime" column="fromtime" javaType="java.sql.Date"/>
+        <result property="totime" column="totime" javaType="java.sql.Date"/>
+        <result property="ustatus" column="ustatus"/>
+    </resultMap>
+    <select id="joinUserParams" resultMap="joinUser" parameterType="com.wtu.util.Params">
+        select * from user
+        <where>
+            ustatus = 1
+            <if test="uname!=null and uname!=''">
+                and uname like '%${uname}%'
+            </if>
+            <if test="idcard!=null and idcard!=''">
+                and idcard like '%${idcard}%'
+            </if>
+            <if test="uphone!=null and uphone!=''">
+                and uphone like '%${uphone}%'
+            </if>
+            <if test="rid!=null and rid!=''">
+                and rid like '%${rid}%'
+            </if>
+        </where>
+    </select>
+<!--分页查询退房后的用户-->
+    <select id="nullUserParams" resultMap="joinUser" parameterType="com.wtu.util.Params">
+        select * from user
+        <where>
+            ustatus = 0
+            <if test="uname!=null and uname!=''">
+                and uname like '%${uname}%'
+            </if>
+            <if test="idcard!=null and idcard!=''">
+                and idcard like '%${idcard}%'
+            </if>
+            <if test="uphone!=null and uphone!=''">
+                and uphone like '%${uphone}%'
+            </if>
+            <if test="rid!=null and rid!=''">
+                and rid like '%${rid}%'
+            </if>
+        </where>
+        ORDER BY totime DESC
+    </select>
+
+    <!--添加住户-->
+    <insert id="addUser" parameterType="com.wtu.entity.User">
+        insert into user
+        <trim prefix="(" suffix=")"  suffixOverrides=",">
+            <if test="uname!=null">
+                uname,
+            </if>
+            <if test="idcard!=null">
+                idcard,
+            </if>
+            <if test="uphone!=null">
+                uphone,
+            </if>
+            <if test="usex!=null">
+                usex,
+            </if>
+            <if test="rid!=null">
+                rid,
+            </if>
+            <if test="fromtime!=null">
+                fromtime,
+            </if>
+            <if test="ustatus!=null">
+                ustatus,
+            </if>
+        </trim>
+        values
+        <trim suffix=")" prefix="(" suffixOverrides=",">
+            <if test="uname!=null">
+                #{uname},
+            </if>
+            <if test="idcard!=null">
+                #{idcard},
+            </if>
+            <if test="uphone!=null">
+                #{uphone},
+            </if>
+            <if test="usex!=null">
+                #{usex},
+            </if>
+            <if test="rid!=null">
+                #{rid},
+            </if>
+            <if test="fromtime!=null">
+                #{fromtime},
+            </if>
+            <if test="ustatus!=null">
+                #{ustatus},
+            </if>
+        </trim>
+    </insert>
+
+<!--    删除用户信息-->
+    <delete id="deleteUser">
+        delete from user where uid =#{uid}
+    </delete>
+
+<!--    修改用户信息-->
+    <!--修改-->
+    <update id="updateUser" parameterType="com.wtu.entity.User">
+        update user set uname = #{uname},idcard = #{idcard},uphone = #{uphone},usex = #{usex},rid = #{rid}
+        where uid = #{uid}
+    </update>
+
+<!--    查询用户信息-->
+    <select id="selectUser" resultType="com.wtu.entity.User">
+        select * from user where uid = #{uid}
+    </select>
+
+    <!--    查询已预定用户信息-->
+    <select id="ingUserParams" resultMap="joinUser" parameterType="com.wtu.util.Params">
+    select * from user
+    <where>
+        ustatus = 2
+        <if test="uname!=null and uname!=''">
+            and uname like '%${uname}%'
+        </if>
+        <if test="idcard!=null and idcard!=''">
+            and idcard like '%${idcard}%'
+        </if>
+        <if test="uphone!=null and uphone!=''">
+            and uphone like '%${uphone}%'
+        </if>
+        <if test="rid!=null and rid!=''">
+            and rid like '%${rid}%'
+        </if>
+    </where>
+    </select>
+
+    <update id="ustatusUser">
+        update user set ustatus=0 where rid=#{rid}
+    </update>
+
+    <delete id="quitRoom">
+        delete from user where rid = #{rid} and ustatus=2
+    </delete>
+
+<!--    根据ID 查询当前正在入住的用户-->
+    <select id="selectIngUser" resultType="com.wtu.entity.User">
+        select * from user where rid=#{rid} and ustatus = 1
+    </select>
+
+<!--    updateDateUser-->
+    <update id="updateDateUser" >
+        update user set  totime = #{totime} where rid = #{rid} and ustatus=1
+    </update>
+</mapper>

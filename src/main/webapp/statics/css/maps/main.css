@@ -1,0 +1,61 @@
+.left{
+    height:250px;
+    width: 350px;
+    margin-left: 150px;
+    float: left;
+    /*animation:myfirst 10s infinite alternate;*/
+}
+.left-bottom{
+    height:250px;
+    width: 350px;
+    margin-left: 150px;
+    margin-top: 30px;
+    float: left;
+    /*animation:myfirst 5s infinite alternate;*/
+}
+.right{
+    height:250px;
+    width: 350px;
+    margin-left:650px;
+    /*animation:myfirst 5s infinite alternate;*/
+}
+.right-bottom{
+    height:250px;
+    width: 350px;
+    margin-left:650px;
+    margin-top: 30px;
+    /*animation:myfirst 5s infinite alternate;*/
+}
+.img1{
+    height:200px;
+    width: 350px;
+    /*animation:myfirst 5s infinite alternate;*/
+}
+img:hover{
+    transform: scale(1.2);
+}
+.title{
+    border:1px solid black;
+    height: 700px;
+    width: 1200px;
+    margin-top: 50px;
+    /*background-image: url("../../images/7.jpg");*/
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation:myfirst1 20s infinite alternate;
+}
+.h1{
+    height: 45px;
+    width: 350px;
+    text-align: center;
+    color: black;
+}
+
+@keyframes myfirst1
+{
+    0%  {background-image: url("../../images/f6.jpg")}
+    25%  {background-image: url("../../images/f7.jpg")}
+    50%  {background-image: url("../../images/f8.jpg")}
+    75%  {background-image: url("../../images/f9.jpg")}
+    100% {background-image: url("../../images/f10.jpg")}
+}

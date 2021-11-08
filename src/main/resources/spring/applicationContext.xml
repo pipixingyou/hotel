@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <!--    1 扫描-->
+    <context:component-scan base-package="com.wtu"/>
+    <!--    2 加载数据库四要素-->
+    <context:property-placeholder location="classpath:mybatis/db/db.properties"/>
+    <!--   3 数据库配置-->
+    <bean id="mydata" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    <!--    sqlSessionFactory-->
+    <bean id="SqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--        4.1数据源配置-->
+        <property name="dataSource" ref="mydata"/>
+        <!--        4.2别名-->
+        <!--        <property name="typeAliasesPackage" value="com.wtu.entity"/>-->
+        <!--        4.3mapper映射文件-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <!--        4.4mybatis配置文件 现在还不需要-->
+        <property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml"/>
+    </bean>
+    <!--    5 接口扫描 工厂配置-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--        5.1关联sqlSessionFactory-->
+        <property name="sqlSessionFactoryBeanName" value="SqlSessionFactory"/>
+        <!--        5.2接口-->
+        <property name="basePackage" value="com.wtu.mapper"/>
+    </bean>
+</beans>

@@ -1,0 +1,38 @@
+body{
+    width: 100%;
+    font-family: sans-serif;
+    background: url("../images/1.jpg");
+    background-size: cover;
+}
+.box
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width:250px;
+    height: 250px;
+    padding: 40px;
+    background:rgba(0,191,255,.8);
+    box-sizing:border-box;
+    box-shadow:0 15px 25px rgba(0,191,255,.5);
+    border-radius: 500px;/*登录窗口边角圆滑*/
+    animation:myfirst 5s infinite alternate;
+}
+.box a{
+    margin:0 0 30px;
+    padding:0;
+    text-decoration: none;
+    font-size: 27px;
+    text-align: center;
+}
+
+@keyframes myfirst
+{
+    0%   {background:LightSkyBlue; text-align: center; top:300px;}
+    25%  {background:SkyBlue; text-align: center; top:350px;}
+    50%  {background:DeepSkyBlue; text-align: center; top:400px;}
+    75%  {background:SkyBlue; text-align: center; top:450px;}
+    100% {background:LightSkyBlue; text-align: center; top:500px;}
+}
+

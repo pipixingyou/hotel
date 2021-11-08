@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wtu.mapper.RoomMapper">
+    <select id="nullRoom" resultType="com.wtu.entity.Room">
+            SELECT  rid,floor,rstatus,
+    (SELECT rname from roomtype t where t.typeid=r.typeid) as rname,
+    (SELECT price from roomtype t where t.typeid=r.typeid) as price
+    FROM room r where rstatus=0
+    </select>
+
+<!--查询空房间-->
+    <select id="nullRoomParams" resultType="com.wtu.entity.Room" parameterType="com.wtu.util.Params">
+            SELECT  rid,floor,rstatus,typeid,
+    (SELECT rname from roomtype t where t.typeid=r.typeid) as rname,
+    (SELECT price from roomtype t where t.typeid=r.typeid) as price
+    FROM room r
+    <where>
+        rstatus=0
+        <if test="floor!=null and floor!=''">
+            and floor = #{floor}
+        </if>
+        <if test="rname!=null and rname!=''">
+            and typeid = (SELECT typeid from roomtype t WHERE t.rname like '%${rname}%')
+        </if>
+    </where>
+    </select>
+
+<!--    根据ID查询房间-->
+    <select id="selectRoomById" resultType="com.wtu.entity.Room">
+        select * from room r where rid=#{rid}
+    </select>
+
+<!--    查询有人住的房间-->
+    <select id="fullRoomParams" resultType="com.wtu.entity.Room" parameterType="com.wtu.util.Params">
+        SELECT  rid,floor,rstatus,rcount,typeid,
+        (SELECT rname from roomtype t where t.typeid=r.typeid) as rname,
+        (SELECT price from roomtype t where t.typeid=r.typeid) as price
+        FROM room r
+        <where>
+            rstatus=1
+            <if test="floor!=null and floor!=''">
+                and floor = #{floor}
+            </if>
+            <if test="rname!=null and rname!=''">
+                and typeid = (SELECT typeid from roomtype t WHERE t.rname like '%${rname}%')
+            </if>
+            <if test="rid!=null and rid!=''">
+                and rid like '%${rid}%'
+            </if>
+        </where>
+    </select>
+
+<!--    线下订房-->
+    <update id="resRoom" parameterType="com.wtu.entity.Room" >
+        update room set rstatus = 1,rcount = rcount + 1
+        where rid = #{rid}
+    </update>
+
+<!--    fixRoom-->
+    <select id="fixRoom" resultType="com.wtu.entity.Room" >
+        SELECT  rid,floor,rstatus,typeid,
+    (SELECT rname from roomtype t where t.typeid=r.typeid) as rname
+    FROM room r where rstatus=3
+    </select>
+
+    <select id="ingRoom" resultType="com.wtu.entity.Room" >
+        SELECT  rid,floor,rstatus,typeid,
+    (SELECT rname from roomtype t where t.typeid=r.typeid) as rname,
+    (SELECT price from roomtype t where t.typeid=r.typeid) as price
+    FROM room r where rstatus=2
+    </select>
+
+<!--    房间维修好了 退房 状态改为0 人数改为0-->
+    <update id="quitRoom" >
+        update room set rstatus=0,rcount=0 where rid=#{rid}
+    </update>
+
+<!--    维修房间状态改为3-->
+    <update id="badRoom">
+        update room set rstatus=3 where rid=#{rid}
+    </update>
+
+<!--    selectRoomCount 查询空房-->
+    <select id="selectRoomCount" resultType="java.lang.Integer">
+       SELECT count(*) FROM room WHERE rstatus=0
+    </select>
+
+    <select id="bookRoom" >
+        update room set rstatus = 2 where rid=#{rid}
+    </select>
+</mapper>
